@@ -72,13 +72,13 @@ barplot(prop.table(table(customers_paidy_training$SeriousDlqin2yrs)),col=c("oran
 ##Data Cleanse
 
 
-## Correlation ##
+# Correlation ##
 
 M <- cor(customers_paidy_training)
 corrplot(M, method = "color")
 
 
-## Replace missing ones
+# Replace missing ones
 
 training_withoutNA_MonthlyIncome <- customers_paidy_training %>%  filter(!is.na(MonthlyIncome))
 training_withoutNA_NumberofDependants <- customers_paidy_training %>%  filter(!is.na(NumberOfDependents))
@@ -133,26 +133,27 @@ Customers_Dlq_9 <- glm(SeriousDlqin2yrs~`NumberOfTime30-59DaysPastDueNotWorse`+`
                        family="binomial")
 Customers_Dlq_10 <- glm(SeriousDlqin2yrs~`NumberOfTime30-59DaysPastDueNotWorse`+`NumberOfTime60-89DaysPastDueNotWorse`+age+MonthlyIncome+NumberOfDependents+NumberOfOpenCreditLinesAndLoans+NumberRealEstateLoansOrLines+DebtRatio ,data=customers_paidy_training,
                        family="binomial")
-Customers_Dlq_11 <- glm(SeriousDlqin2yrs~`NumberOfTime30-59DaysPastDueNotWorse`+`NumberOfTime60-89DaysPastDueNotWorse`+age+MonthlyIncome+NumberOfDependents+NumberOfOpenCreditLinesAndLoans+NumberRealEstateLoansOrLines+DebtRatio+RevolvingUtilizationOfUnsecuredLines ,data=customers_paidy_training,
-                        family="binomial")
+##Customers_Dlq_11 <- glm(SeriousDlqin2yrs~`NumberOfTime30-59DaysPastDueNotWorse`+`NumberOfTime60-89DaysPastDueNotWorse`+age+MonthlyIncome+NumberOfDependents+NumberOfOpenCreditLinesAndLoans+NumberRealEstateLoansOrLines+DebtRatio+RevolvingUtilizationOfUnsecuredLines ,data=customers_paidy_training,
+  #                      family="binomial")
 
-summary(Customers_Dlq_11)
+summary(Customers_Dlq_10)
 
 anova(Customers_Dlq_1,Customers_Dlq_2,Customers_Dlq_3,Customers_Dlq_5,Customers_Dlq_6,Customers_Dlq_7,Customers_Dlq_8,Customers_Dlq_9,Customers_Dlq_10,Customers_Dlq_11,test="Chisq")
 
-Customers_Dlq_11_pred <- predict(Customers_Dlq_11,type="response")  
-Customers_Dlq_11_pred
-Customers_paidy_pred <- cbind(customers_paidy_training,Customers_Dlq_11_pred)
+Customers_Dlq_10_pred <- predict(Customers_Dlq_10,type="response")  
+Customers_Dlq_10_pred
+Customers_paidy_pred <- cbind(customers_paidy_training,Customers_Dlq_10_pred)
 Customers_paidy_pred
 summary(Customers_paidy_pred)
 
-Customers_paidy_pred_1 <- subset(Customers_paidy_pred, Customers_Dlq_11_pred <= .06684)
-Customers_paidy_pred_2 <- subset(Customers_paidy_pred, Customers_Dlq_11_pred <= .1 & Customers_Dlq_11_pred > .06684)
-Customers_paidy_pred_3 <- subset(Customers_paidy_pred, Customers_Dlq_11_pred <= .3 & Customers_Dlq_11_pred > .1)
-Customers_paidy_pred_4 <- subset(Customers_paidy_pred, Customers_Dlq_11_pred <= .5 & Customers_Dlq_11_pred > .3)
-Customers_paidy_pred_4 <- subset(Customers_paidy_pred, Customers_Dlq_11_pred <= .75 & Customers_Dlq_11_pred > .5)
-Customers_paidy_pred_5 <- subset(Customers_paidy_pred, Customers_Dlq_11_pred > .75)
+Customers_paidy_pred_1 <- subset(Customers_paidy_pred, Customers_Dlq_10_pred <= .06684)
+Customers_paidy_pred_2 <- subset(Customers_paidy_pred, Customers_Dlq_10_pred <= .1 & Customers_Dlq_11_pred > .06684)
+Customers_paidy_pred_3 <- subset(Customers_paidy_pred, Customers_Dlq_10_pred <= .3 & Customers_Dlq_11_pred > .1)
+Customers_paidy_pred_4 <- subset(Customers_paidy_pred, Customers_Dlq_10_pred <= .5 & Customers_Dlq_11_pred > .3)
+Customers_paidy_pred_4 <- subset(Customers_paidy_pred, Customers_Dlq_10_pred <= .75 & Customers_Dlq_11_pred > .5)
+Customers_paidy_pred_5 <- subset(Customers_paidy_pred, Customers_Dlq_10_pred > .75)
 
 ##End## 
+
 
 
